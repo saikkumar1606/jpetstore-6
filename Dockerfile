@@ -15,6 +15,15 @@
 #
 
 FROM tomcat:8-jre8 
+
 MAINTAINER "Vcube"
-COPY ./target/jpetstore.war /usr/local/tomcat/webapps
+
+# Create a directory in the container to store your application
+WORKDIR /usr/local/tomcat/webapps
+
+# Copy the WAR file from the host to the container
+
+
+COPY jpetstore.war .
 EXPOSE 8080 
+
