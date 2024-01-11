@@ -24,6 +24,6 @@ WORKDIR /usr/local/tomcat/webapps
 # Copy the WAR file from the host to the container
 
 
-COPY jpetstore.war .
+COPY target/jpetstore.war .
 EXPOSE 8080 
 
