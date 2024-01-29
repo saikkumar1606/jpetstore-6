@@ -1,0 +1,15 @@
+# Download and Extract Maven
+wget https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+tar -xzvf apache-maven-3.9.6-bin.tar.gz
+rm -rf apache-maven-3.9.6-bin.tar.gz
+
+# Move Maven to /opt
+sudo mv apache-maven-3.9.6 /opt/
+
+# Set Environment Variables and Update .bashrc
+echo 'export M2_HOME=/opt/maven3.9' >> ~/.bashrc
+echo 'export PATH=$PATH:$M2_HOME/bin' >> ~/.bashrc
+source ~/.bashrc
+
+# Verify Maven Version
+mvn --version
