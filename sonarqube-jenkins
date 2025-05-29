@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/prudhvisurya996/jpetstore-6.git']])
+            }
+        }
+        stage('maven compile') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('maven package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('sonarqube') {
+             environment {
+             scannerHome = tool 'sonar-scanner'
+          }
+        steps {
+    withSonarQubeEnv('sonarqube') {
+      sh '''${scannerHome}/bin/sonar-scanner \
+        -Dsonar.projectKey=jpetstore \
+        -Dsonar.projectName=jpetstore-6 \
+        -Dsonar.projectVersion=1.0 \
+        -Dsonar.sources=src \
+        -Dsonar.java.binaries=target/classes \
+        -Dsonar.junit.reportPaths=target/surefire-reports \
+        -Dsonar.jacoco.reportPaths=target/jacoco.exec \
+        -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+    }
+    timeout(time: 10, unit: 'MINUTES') {
+      waitForQualityGate abortPipeline: true
+      }
+    }
+  }
+    }
+}
